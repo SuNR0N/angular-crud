@@ -24,7 +24,7 @@
   "homepage": "https://github.com/SuNR0N/angular-crud",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently --kill-others \"npm run server\" \"ng serve --proxy-config proxy.config.json\"",
+    "start": "concurrently --kill-others \"npm run server\" \"ng serve --proxy-config config/proxy.conf.json\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

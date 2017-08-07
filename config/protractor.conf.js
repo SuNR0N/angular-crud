@@ -4,7 +4,7 @@
 exports.config = {
   allScriptsTimeout: 11000,
   specs: [
-    './e2e/features/*.feature'
+    '../e2e/features/*.feature'
   ],
   capabilities: {
     'browserName': 'chrome'
@@ -18,7 +18,7 @@ exports.config = {
     strict: true,
     format: 'pretty',
     require: [
-      './e2e/step-definitions/*.ts'
+      '../e2e/step-definitions/*.ts'
     ],
     tags: ''
   },
