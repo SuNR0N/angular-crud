@@ -1,0 +1,163 @@
+swagger: '2.0'
+info:
+  description: API specification for Angular CRUD
+  version: 1.0.0
+  title: Angular CRUD
+  contact:
+    email: annus.norbert@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:3000'
+basePath: /api
+tags:
+  - name: books
+    description: Everything about your Books
+schemes:
+  - http
+paths:
+  /books:
+    get:
+      tags:
+        - books
+      summary: Retrieves all books from the store
+      description: ''
+      operationId: getBooks
+      produces:
+        - application/xml
+        - application/json
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+    post:
+      tags:
+        - books
+      summary: Adds a new book to the store
+      description: ''
+      operationId: createBook
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Book object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '201':
+          description: Book has been successfully created
+        '400':
+          description: Invalid request
+        '409':
+          description: Book with ISBN already exists
+  '/books/{id}':
+    delete:
+      tags:
+        - books
+      summary: Deletes book by ISBN
+      description: ''
+      operationId: deleteBook
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ISBN of the book to delete
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Successful operation
+        '404':
+          description: Book not found
+    get:
+      tags:
+        - books
+      summary: Finds book by ISBN
+      description: ''
+      operationId: getBook
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ISBN of the book to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Book'
+        '404':
+          description: Book not found
+    put:
+      tags:
+        - books
+      summary: Updates book by ISBN
+      description: ''
+      operationId: updateBook
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ISBN of the book to update
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Book object that needs to be updated in the store
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '201':
+          description: Book has been successfully updated
+        '400':
+          description: Invalid request
+        '404':
+          description: Book not found
+definitions:
+  Book:
+    type: object
+    required:
+      - isbn
+      - title
+      - authors
+    properties:
+      isbn:
+        type: string
+        description: >-
+          International Standard Book Number (ISBN) is a 13-digit number that
+          uniquely identifies books and book-like products published
+          internationally
+      title:
+        type: string
+        description: An identifying name given to a book
+      authors:
+        type: array
+        items:
+          type: string
+          description: Full name of a writer of the book
+      description:
+        type: string
+        description: Short story of the book
+      publicationDate:
+        type: string
+        description: 'The date on which the book is published, or is going to be published'
