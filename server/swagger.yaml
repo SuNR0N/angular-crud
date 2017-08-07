@@ -127,7 +127,7 @@ paths:
           schema:
             $ref: '#/definitions/Book'
       responses:
-        '201':
+        '200':
           description: Book has been successfully updated
         '400':
           description: Invalid request
