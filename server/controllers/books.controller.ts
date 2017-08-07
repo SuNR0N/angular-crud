@@ -8,11 +8,8 @@ import { BookDTO } from '../models/book.dto';
 
 @injectable()
 export class BooksController extends RoutableController {
-    private booksService: BooksService;
-
-    constructor(@inject(types.BooksService) booksService: BooksService) {
+    constructor(@inject(types.BooksService) private booksService: BooksService) {
         super('books');
-        this.booksService = booksService;
     }
 
     getRouter(): Router {

@@ -3,6 +3,7 @@ import { booksDatabase, Book, IBookDocument } from '../models/book.schema';
 import { logger } from '../utils/logger';
 
 export interface IBooksRepository {
+    init(books: IBookDocument[]): Promise<void>;
     findAll(): Promise<Book[]>;
     findOne(id: string): Promise<Book>;
     create(book: IBookDocument): Promise<Book>;
@@ -12,6 +13,12 @@ export interface IBooksRepository {
 
 @injectable()
 export class BooksRepository implements IBooksRepository {
+    public async init(books: IBookDocument[]): Promise<void> {
+        await booksDatabase.connect()
+            .then(() => booksDatabase.books.remove())
+            .then(() => books.forEach((book) => booksDatabase.books.insert(book)));
+    }
+
     public async findAll(): Promise<Book[]> {
         const books = await booksDatabase.connect()
             .then(() => booksDatabase.books.find());
@@ -20,7 +27,9 @@ export class BooksRepository implements IBooksRepository {
 
     public async findOne(id: string): Promise<Book> {
         return await booksDatabase.connect()
-            .then(() => booksDatabase.books.findOne(id));
+            .then(() => booksDatabase.books.findOne({
+                isbn: id
+            }));
     }
 
     public async create(book: IBookDocument): Promise<Book> {
@@ -32,7 +41,7 @@ export class BooksRepository implements IBooksRepository {
         const existingBook: Book = await booksDatabase.connect()
             .then(() => booksDatabase.books.findOne(book._id));
 
-        existingBook._id = book._id;
+        existingBook.isbn = book.isbn;
         existingBook.title = book.title;
         existingBook.authors = book.authors;
         existingBook.description = book.description ? book.description : null;
@@ -51,7 +60,9 @@ export class BooksRepository implements IBooksRepository {
 
     public async delete(id: string): Promise<Book> {
         const existingBook: Book = await booksDatabase.connect()
-            .then(() => booksDatabase.books.findOne(id));
+            .then(() => booksDatabase.books.findOne({
+                isbn: id
+            }));
 
         const deletedBook: Book = await existingBook.delete((err: Error, b: Book) => {
             if (err) {

@@ -2,7 +2,8 @@ import { Core, Model, Instance, Collection, Index, Property, ObjectID } from 'ir
 import { config } from '../config/server.config';
 
 export interface IBookDocument {
-    _id: string;
+    _id?: string;
+    isbn: string;
     title: string;
     authors: string[];
     description?: string;
@@ -15,6 +16,8 @@ export class Book extends Instance<IBookDocument, Book> implements IBookDocument
     @ObjectID
     // tslint:disable-next-line:variable-name
     public _id: string;
+    @Property(String, true)
+    public isbn: string;
     @Property(String, true)
     public title: string;
     @Property(Array, true)
